@@ -1,0 +1,10 @@
+{
+  "name": "toy-browser",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server.js; node client.js"
+  },
+  "dependencies": {
+    "css": "^2.2.4"
+  }
+}

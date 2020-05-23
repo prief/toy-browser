@@ -233,6 +233,7 @@ void async function(){
     let res = await request.send();
     // console.log(res);
     let dom = parser.parseHTML(res.body)
+    console.log(dom);
 }();
 
 // const client = net.createConnection({
@@ -272,4 +273,3 @@ void async function(){
 // client.on("end",()=>{
 //     console.log("disconnected from server")
 // })
-
