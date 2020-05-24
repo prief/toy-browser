@@ -1,4 +1,6 @@
 const net = require("net");
+const images = require("images");
+const render = require("./render.js");
 const parser = require("./parser.js");
 
 class Request {
@@ -234,6 +236,10 @@ void async function(){
     // console.log(res);
     let dom = parser.parseHTML(res.body)
     console.log(dom);
+
+    let viewport = images(800,600);
+    render(viewport,dom);
+    viewport.save("viewport.jpg")
 }();
 
 // const client = net.createConnection({
