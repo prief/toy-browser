@@ -302,15 +302,82 @@ function computeCSS(el){
         }
         if(matched){
             console.log("element",el,"matched rule",rule)
+            var spec = specificity(selector);
+            var computedStyle = el.computedStyle;
+            for(var declaration of rule.declarations){
+                if(!computedStyle[declaration.property]){
+                    computedStyle[declaration.property] = {}
+                }
+                if(!computedStyle[declaration.property].specificity){
+                    computedStyle[declaration.property].value = declaration.value;
+                    computedStyle[declaration.property].specificity = spec;
+                }else if(compare(computedStyle[declaration.property].specificity,spec) < 0 ){
+                    computedStyle[declaration.property].value = declaration.value;
+                    computedStyle[declaration.property].specificity = spec;
+                }   
+            }
         }
-
     }
 }
 
 function match(el,selector){
+    if(!selector || !el.attributes){
+        return false;
+    }
+
+    let char0 = selector.charAt(0);
+    if(char0 == "#"){
+        let attr = el.attributes.filter(attr =>attr.name === "id")[0]
+
+        if(attr && attr.value === selector.replace("#","")){
+            return true;
+        }
+    }else if(char0 == "."){
+        let attr = el.attributes.filter(attr =>attr.name === "class")[0]
+
+        if(attr && attr.value === selector.replace(".","")){
+            return true;
+        }
+    }else{
+        if(el.tagName === selector){
+            return true;
+        }
+    }
+
+    return false;
 
 }
 
+function specificity(selector){
+    let s = [0,0,0,0]
+    let selectorParts = selector.split(" ");
+    for(let part of selectorParts){
+        let tmp = part.charAt(0);
+        if(tmp == "#"){
+            s[1] += 1;
+        }else if(tmp == "."){
+            s[2] += 1;
+        }else{
+            s[3] += 1;
+        }
+    } 
+    return s;
+
+}
+
+
+function compare(spec1,spec2){
+    if(spec1[0] - spec2[0]){
+        return spec1[0] - spec2[0];
+    }
+    if(spec1[1] - spec2[1]){
+        return spec1[1] - spec2[1];
+    }
+    if(spec1[2] - spec2[2]){
+        return spec1[2] - spec2[2];
+    }
+    return spec1[3] - spec2[3];
+}
 module.exports.parseHTML = function parseHTML(html){
     // console.log(html)
 
