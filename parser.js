@@ -46,9 +46,9 @@ function emit(token){
             if(top.tagName == "style"){
                 assCSSRules(top.children[0].content)
             }
-            layout(top)
             stack.pop();
         }
+        layout(top);
         currentTextNode = null;
     }else if(token.type == "text"){
         if(currentTextNode == null){
@@ -316,8 +316,9 @@ function computeCSS(el){
                     computedStyle[declaration.property].value = declaration.value;
                     computedStyle[declaration.property].specificity = spec;
                 }else if(compare(computedStyle[declaration.property].specificity,spec) < 0 ){
-                    computedStyle[declaration.property].value = declaration.value;
-                    computedStyle[declaration.property].specificity = spec;
+                    for(var k =0;k<4;k++){
+                        computedStyle[declaration.property][declaration.value][k] += spec[k];
+                    }
                 }   
             }
         }

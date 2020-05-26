@@ -111,7 +111,7 @@ module.exports = function layout(el){
     var crossSpace = 0;
 
     for(var i = 0;i <items.length;i++){
-        var item = itmes[i];
+        var item = items[i];
         var itemStyle = getStyle(item);
 
         if(itemStyle[mainSize] === null){
@@ -122,7 +122,7 @@ module.exports = function layout(el){
             flexLine.push(item)
         }else if(style.flexWrap == "nowrap" && isAutoMainSize){
             mainSpace -= itemStyle[mainSize];
-            if(itemStyle[crossSize] !== null && itemStyle[crossSize] !== null){
+            if(itemStyle[crossSize] !== null && itemStyle[crossSize] !== (void 0)){
                 crossSpace = Math.max(crossSpace,itemStyle[crossSize])
             }
             flexLine.push(item)
@@ -141,7 +141,7 @@ module.exports = function layout(el){
             }else{
                 flexLine.push(item)
             }
-            if(itemStyle[crossSize] !== null && itemStyle[crossSize]){
+            if(itemStyle[crossSize] !== null && itemStyle[crossSize] !== (void 0)){
                 crossSpace = Math.max(crossSpace,itemStyle[crossSize])
             }
             mainSpace -= itemStyle[mainSize];
@@ -160,7 +160,7 @@ module.exports = function layout(el){
         var scale = style[mainSize]/ (style[mainSize] - mainSpace)
         var currentMain = mainBase;
         for(var i = 0;i<items.length;i++){
-            var item = itmes[i];
+            var item = items[i];
             var itemStyle = getStyle(item);
             if(itemStyle.flex){
                 itemStyle[mainSize] = 0;
@@ -173,11 +173,11 @@ module.exports = function layout(el){
         }
     }else{
         flexLines.forEach((items)=>{
-            var mainSpace = item.mainSpace;
+            var mainSpace = items.mainSpace;
             var flexTotal = 0;
 
             for(var i = 0;i<items.length;i++){
-                var item = itmes[i];
+                var item = items[i];
                 var itemStyle = getStyle(item);
 
                 if((itemStyle.flex !== null ) && (itemStyle.flex !== undefined )){
@@ -190,7 +190,7 @@ module.exports = function layout(el){
             if(flexTotal >0 ){
                 var currentMain = mainBase;
                 for(var i = 0;i<items.length;i++){
-                    var item = itmes[i];
+                    var item = items[i];
                     var itemStyle = getStyle(item);
     
                     if(itemStyle.flex ){
@@ -242,7 +242,7 @@ module.exports = function layout(el){
         crossSpace = 0;
         elementStyle[crossSize] = 0;
         for(var i = 0;i<flexLines.length;i++){
-            elementStyle[crossSize] =  elementStyle[crossSize] + flex;
+            elementStyle[crossSize] =  elementStyle[crossSize] + flexLines[i].crossSpace;
         }
     }else{
         crossSpace = style[crossSize];
@@ -268,8 +268,13 @@ module.exports = function layout(el){
         step =0;
     }
     if(style.alignContent == "center"){
+        crossBase += crosssign * crossSpace / 2;
+        step =0;
+    }
+    if(style.alignContent == "space-between"){
         crossBase += 0;
         step = crossSpace / (flexLines.length - 1);
+        
     }
     if(style.alignContent == "space-around"){
         step = crossSpace / (flexLines.length);
@@ -281,7 +286,7 @@ module.exports = function layout(el){
         step =0;
     }
 
-    flexLines.forEach(item=>{
+    flexLines.forEach(items=>{
         var lineCrossSize = style.alignContent == "stretch" ? 
             items.crossSpace + crossSpace / flexLines.length :
             items.crossSpace;
@@ -304,12 +309,12 @@ module.exports = function layout(el){
                 itemStyle[crossStart] = itemStyle[crossEnd] -  crossSign * itemStyle[crossSize];
             }
             if(align == "center"){
-                itemStyle[crossStart] = crossBase + crossSign * (lineCrossSize- itemStyle[crossSize]);
+                itemStyle[crossStart] = crossBase + crossSign * (lineCrossSize- itemStyle[crossSize]) / 2;
                 itemStyle[crossEnd] = itemStyle[crossStart] + crossSign * itemStyle[crossSize];
             }
             if(align == "stretch"){
                 itemStyle[crossStart] = crossBase;
-                itemStyle[crossEnd] = itemStyle[crossStart] + crossSign * (itemStyle[crossSize] !== null && i);
+                itemStyle[crossEnd] = itemStyle[crossStart] + crossSign * ((itemStyle[crossSize] !== null && itemStyle[crossSize] !== (void 0)) ? itemStyle[crossSize] : lineCrossSize);
                 itemStyle[crossSize] = crossSign * (itemStyle[crossEnd] - itemStyle[crossStart])
             }
        
