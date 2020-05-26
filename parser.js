@@ -306,7 +306,7 @@ function computeCSS(el){
         }
         if(matched){
             console.log("element",el,"matched rule",rule)
-            var spec = specificity(selector);
+            var spec = specificity(rule.selectors[0]);
             var computedStyle = el.computedStyle;
             for(var declaration of rule.declarations){
                 if(!computedStyle[declaration.property]){
