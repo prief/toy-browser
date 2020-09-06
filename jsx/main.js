@@ -1,55 +1,5 @@
 import { create } from "./creatElement";
-// import { Carousel } from "./Carousel.view";
-class Carousel {
-  constructor(config) {
-    this.children = [];
-    this.attributes = new Map();
-    this.properties = new Map();
-  }
-
-  setAttribute(n, v) {
-    this[n] = v;
-  }
-  appendChild(c) {
-    this.children.push(c);
-  }
-
-  render() {
-    let children = this.data.map((url) => {
-      let e = <img src={url} />;
-      e.addEventListener("dragstart", (e) => e.preventDefault());
-      return e;
-    });
-    let root = <div class="carousel">{children}</div>;
-    let p = 0;
-    let nextPic = () => {
-      let nextP = (p + 1) % this.data.length;
-      let cur = children[p];
-      let next = children[nextP];
-
-      cur.style.transition = "ease 0s";
-      next.style.transition = "ease 0s";
-      cur.style.transform = `translateX(${-100 * p}%)`;
-      next.style.transform = `translateX(${100 - 100 * nextP}%)`;
-
-      setTimeout(() => {
-        cur.style.transition = "ease 0.5s";
-        next.style.transition = "ease 0.5s";
-        cur.style.transform = `translateX(${-100 - 100 * p}%)`;
-        next.style.transform = `translateX(${-100 * nextP}%)`;
-        p = nextP;
-        console.log(p);
-      }, 16);
-      setTimeout(nextPic, 3000);
-    };
-    setTimeout(nextPic, 3000);
-    return root;
-  }
-  mountTo(parent) {
-    this.render().mountTo(parent);
-  }
-}
-
+import { Carousel } from "./Carousel.js";
 let c = (
   <Carousel
     data={[
