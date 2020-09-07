@@ -21,6 +21,12 @@ module.exports = {
           loader: require.resolve("./myLoader.js"),
         },
       },
+      {
+        test: /\.css$/,
+        use: {
+          loader: require.resolve("./myCssLoader.js"),
+        },
+      },
     ],
   },
 };

@@ -4,6 +4,8 @@ import { Timeline, Animation } from "./animation.js";
 import { ease } from "./cubicBezier.js";
 import { enableGesture } from "./gesture.js";
 
+import './carousel.css'
+
 export class Carousel {
   constructor(config) {
     this.children = [];

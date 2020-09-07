@@ -1,3 +1,5 @@
+// createElement.js
+
 import { enableGesture } from "./gesture";
 
 export function create(Classname, attributes, ...children) {
@@ -38,6 +40,9 @@ export class Text {
   mountTo(parent) {
     parent.appendChild(this.root);
   }
+  getAttribute(n) {
+    return;
+  }
 }
 
 export class Wrapper {
@@ -59,6 +64,13 @@ export class Wrapper {
       enableGesture(this.root);
     }
   }
+  getAttribute(n) {
+    return this.root.getAttribute(n);
+  }
+
+  get classList() {
+    return this.root.classList;
+  }
   appendChild(child) {
     console.log("::appendChild", child);
     this.children.push(child);
@@ -70,6 +82,11 @@ export class Wrapper {
   addEventListener() {
     this.root.addEventListener(...arguments);
   }
+
+  set innerText(t) {
+    return (this.root.innerText = t);
+  }
+
   mountTo(parent) {
     parent.appendChild(this.root);
     for (let child of this.children) {
